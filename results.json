@@ -1,0 +1,31 @@
+{
+  "question": "Can a class-balanced, calibrated text classifier beat a standard TF-IDF logistic-regression intent model on macro-F1 and expected calibration error for banking customer-service queries?",
+  "method": "Banking77 official train/test split; baseline TF-IDF word 1-2gram + unweighted multinomial LR; improved word+char TF-IDF + class-balanced LR (C by 3-fold CV on train) + temperature scaling fitted on 5-fold out-of-fold training logits. Test set used once.",
+  "dataset": {
+    "name": "Banking77 (PolyAI)",
+    "source_url": "https://github.com/PolyAI-LDN/task-specific-datasets (banking_data)",
+    "n_rows": 13083,
+    "n_train": 10003,
+    "n_test": 3080,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "macro-F1",
+  "higher_is_better": true,
+  "baseline": "Standard TF-IDF (word unigrams+bigrams) with unweighted multinomial logistic regression, C=1.",
+  "improved": "Word+char_wb(2-5) TF-IDF, class-balanced logistic regression with C chosen by CV on train, and temperature scaling of softmax probabilities fitted on held-out training folds.",
+  "metrics": {
+    "baseline_score": 0.8531129428053715,
+    "baseline_accuracy": 0.8545454545454545,
+    "baseline_ece": 0.4531026298872409,
+    "improved_score": 0.9170682475352051,
+    "improved_accuracy": 0.9168831168831169,
+    "improved_ece": 0.014816824961380797,
+    "improved_uncalibrated_ece": 0.09025223376572009,
+    "improvement": 0.06395530472983357,
+    "ece_improvement": 0.4382858049258601,
+    "cv_best_C": 10.0,
+    "temperature": 0.6257555846370532
+  },
+  "notes": "Official PolyAI split used as the single split (test is about 23% of data, not a stratified random split). Both LR models are deterministic (lbfgs), so one run is reported with no seed variation. The final improved model is refit on the full training set while the temperature was fitted on out-of-fold logits from 80% fits, a common but approximate practice. ECE uses 15 equal-width bins. The paper's own model and dataset were not specified, so this is a standard-baseline comparison only. Runtime: 223s."
+}
