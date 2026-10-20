@@ -19,6 +19,28 @@ python analysis.py
 
 Results: results are written to `results.json` (and a chart to `figures/`).
 
+## Results (latest run)
+
+On the Banking77 test set (3,080 queries), a standard TF-IDF logistic-regression intent classifier reached 85.3% macro-F1 and 45.3% ECE, while my class-balanced, temperature-scaled word+char model reached 91.7% macro-F1 and 1.5% ECE.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.8531 |
+| baseline_accuracy | 0.8545 |
+| baseline_ece | 0.4531 |
+| improved_score | 0.9171 |
+| improved_accuracy | 0.9169 |
+| improved_ece | 0.01482 |
+| improved_uncalibrated_ece | 0.09025 |
+| improvement | 0.06396 |
+| ece_improvement | 0.4383 |
+| cv_best_C | 10 |
+| temperature | 0.6258 |
+
+Run on 2026-10-20. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Official PolyAI split used as the single split (test is about 23% of data, not a stratified random split). Both LR models are deterministic (lbfgs), so one run is reported with no seed variation. The final improved model is refit on the full training set while the temperature was fitted on out-of-fold logits from 80% fits, a common but approximate practice. ECE uses 15 equal-width bins. The paper's own model and dataset were not specified, so this is a standard-baseline comparison only. Runtime: 223s.
+
 ## Reference
 
 This project is motivated by the following paper:
